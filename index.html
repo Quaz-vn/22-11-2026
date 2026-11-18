@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri Ân Thầy Cô 20/11</title>
+    
+    <!-- Thư viện hiệu ứng chữ và cuộn trang -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Font chữ -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- THIẾT LẬP CƠ BẢN --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- HIỆU ỨNG NỀN HẠT BAY --- */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        /* --- PHẦN 1: MÀN HÌNH CHÀO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: #d4af37; /* Màu vàng đồng */
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        #typed-text {
+            font-size: 1.5rem;
+            color: #e0e0e0;
+            height: 40px;
+            margin-bottom: 40px;
+        }
+
+        .btn-enter {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: transparent;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-enter:hover {
+            background: #d4af37;
+            color: #0a0a0a;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+        }
+
+        /* --- PHẦN 2: BỨC THƯ TAY --- */
+        .letter-section {
+            padding: 100px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .letter-box {
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .letter-box h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+
+        .letter-box p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #ccc;
+            text-align: justify;
+        }
+
+        /* --- PHẦN 3: DÒNG THỜI GIAN --- */
+        .timeline-section {
+            padding: 100px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #d4af37;
+            margin-bottom: 60px;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: #d4af37;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .container-timeline {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        .container-timeline.left { left: 0; }
+        .container-timeline.right { left: 50%; }
+
+        .container-timeline::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: #0a0a0a;
+            border: 4px solid #d4af37;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .container-timeline.right::after {
+            left: -10px;
+        }
+
+        .content-timeline {
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .content-timeline h3 {
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+
+        .content-timeline img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        /* --- PHẦN 4: LỜI CẢM ƠN CUỐI --- */
+        .footer-section {
+            padding: 100px 20px;
+            text-align: center;
+            background: linear-gradient(to top, rgba(15, 12, 41, 0.9), transparent);
+        }
+
+        .footer-section h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+
+        .footer-section p {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        .btn-confetti {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background: #d4af37;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .btn-confetti:hover {
+            transform: scale(1.05);
+        }
+
+        /* Nút nhạc */
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(212, 175, 55, 0.8);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .timeline::after { left: 31px; }
+            .container-timeline { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .container-timeline.right { left: 0%; }
+            .container-timeline.left::after, .container-timeline.right::after { left: 21px; }
+            .hero h1 { font-size: 2rem; }
+            #typed-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nền hạt bay -->
+    <div id="particles-js"></div>
+
+    <!-- Nút bật nhạc -->
+    <audio id="bg-music" loop>
+        <!-- Bạn có thể thay link mp3 vào đây, đây là nhạc mẫu -->
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <button class="music-btn" id="music-btn" onclick="toggleMusic()">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- PHẦN 1: MÀN HÌNH CHÀO -->
+    <section class="hero">
+        <h1 data-aos="zoom-in" data-aos-duration="1500">20/11 - Ngày Nhà Giáo Việt Nam</h1>
+        <div id="typed-text"></div>
+        <a href="#buc-thu" class="btn-enter" data-aos="fade-up" data-aos-delay="500">Bước vào khu vườn kỷ niệm</a>
+    </section>
+
+    <!-- PHẦN 2: BỨC THƯ -->
+    <section id="buc-thu" class="letter-section">
+        <div class="letter-box" data-aos="fade-up" data-aos-duration="1000">
+            <h2>Gửi Thầy Cô kính yêu,</h2>
+            <p>Nhân ngày Nhà giáo Việt Nam 20/11, em muốn gửi đến thầy cô những lời tri ân sâu sắc nhất. Cảm ơn thầy cô đã không quản ngại khó khăn, luôn kiên nhẫn dìu dắt chúng em trên con đường tri thức.</p>
+            <p>Những bài giảng của thầy cô không chỉ là những con số, những công thức, mà còn là những bài học làm người quý giá. Có những lúc chúng em lười biếng, làm thầy cô buồn lòng, nhưng tình yêu thương và sự bao dung của thầy cô chưa bao giờ vơi cạn.</p>
+            <p>Chúc thầy cô luôn mạnh khỏe, hạnh phúc và mãi giữ ngọn lửa nhiệt huyết để tiếp tục dẫn dắt những thế hệ học trò tiếp theo.</p>
+            <p style="text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: #d4af37; margin-top: 30px;">Học trò của Thầy Cô</p>
+        </div>
+    </section>
+
+    <!-- PHẦN 3: DÒNG THỜI GIAN -->
+    <section class="timeline-section">
+        <h2 class="timeline-title" data-aos="fade-right">Những Khoảnh Khắc Đáng Nhớ</h2>
+        <div class="timeline">
+            <!-- Kỷ niệm 1 -->
+            <div class="container-timeline left" data-aos="fade-right">
+                <div class="content-timeline">
+                    <h3>Ngày Đầu Tiên Đến Lớp</h3>
+                    <p>Những bỡ ngỡ ban đầu, những nụ cười hiền hậu của thầy cô đã xóa tan đi sự hồi hộp trong em.</p>
+                    <!-- Thay ảnh của bạn vào đây -->
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Kỷ niệm 1">
+                </div>
+            </div>
+            <!-- Kỷ niệm 2 -->
+            <div class="container-timeline right" data-aos="fade-left">
+                <div class="content-timeline">
+                    <h3>Những Giờ Học Đầy Kỷ Niệm</h3>
+                    <p>Từng tiết học, từng giọng nói của thầy cô đã khắc sâu vào tâm trí em.</p>
+                    <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Kỷ niệm 2">
+                </div>
+            </div>
+            <!-- Kỷ niệm 3 -->
+            <div class="container-timeline left" data-aos="fade-right">
+                <div class="content-timeline">
+                    <h3>Lời Cảm Ơn Chân Thành</h3>
+                    <p>Cảm ơn thầy cô vì đã luôn là người lái đò tận tụy, đưa chúng em đến bến bờ tri thức.</p>
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Kỷ niệm 3">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHẦN 4: LỜI KẾT -->
+    <section class="footer-section">
+        <h2 data-aos="zoom-in">Happy Vietnamese Teachers' Day!</h2>
+        <p data-aos="fade-up">Hãy nhấn vào nút bên dưới để gửi đi ngàn lời chúc tốt đẹp nhất!</p>
+        <button class="btn-confetti" onclick="shootConfetti()" data-aos="fade-up">Gửi Ngàn Lời Chúc 🎉</button>
+    </section>
+
+    <!-- Thư viện JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        // 1. Khởi tạo hiệu ứng cuộn
+        AOS.init({
+            once: true, // Chỉ chạy 1 lần
+            offset: 100,
+        });
+
+        // 2. Hiệu ứng chữ đánh máy
+        var typed = new Typed('#typed-text', {
+            strings: ["Gửi những người lái đò thầm lặng...", "Tri ân những người gieo mầm tri thức...", "Cảm ơn Thầy Cô vì tất cả!"],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true
+        });
+
+        // 3. Nền hạt bay
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#d4af37" }, // Màu vàng
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": false },
+                "move": { "enable": true, "speed": 1, "direction": "none", "random": true, "out_mode": "out" }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "bubble" } },
+                "modes": { "bubble": { "distance": 200, "size": 5, "duration": 2 } }
+            },
+            "retina_detect": true
+        });
+
+        // 4. Hiệu ứng pháo giấy
+        function shootConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // 5. Bật/tắt nhạc
+        let isPlaying = false;
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const btn = document.getElementById('music-btn');
+            if (isPlaying) {
+                music.pause();
+                btn.innerHTML = '<i class="fas fa-music"></i>';
+            } else {
+                music.play();
+                btn.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+</body>
+</html>
