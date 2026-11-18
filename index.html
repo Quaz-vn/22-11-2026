@@ -246,6 +246,38 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
+        /* --- HIỆU ỨNG ĐÈN LỒNG --- */
+        .lantern {
+            position: fixed;
+            bottom: -100px;
+            background: linear-gradient(to bottom, #ffeb3b, #ff9800);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 30px 10px rgba(255, 152, 0, 0.6);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.9;
+            animation: floatUp linear forwards;
+        }
+
+        /* Dây treo nhỏ bên dưới đèn */
+        .lantern::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 15px;
+            background: #ffeb3b;
+            box-shadow: 0 0 5px #ffeb3b;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(-5deg); opacity: 1; }
+            50% { transform: translateY(-50vh) rotate(5deg); opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(-5deg); opacity: 0; }
+        }
+
         /* Responsive */
         @media screen and (max-width: 768px) {
             .timeline::after { left: 31px; }
@@ -325,14 +357,14 @@
     <section class="footer-section">
         <h2 data-aos="zoom-in">Chúc mừng Ngày Nhà giáo Việt Nam!</h2>
         <p data-aos="fade-up">Hãy nhấn vào nút bên dưới để gửi đi ngàn lời chúc tốt đẹp nhất!</p>
-        <button class="btn-confetti" onclick="shootConfetti()" data-aos="fade-up">Gửi Ngàn Lời Chúc Đến Thầy Cô Nếu Bạn Là 1 Học Sinh 🎉</button>
+        <!-- Đã đổi text và gọi hàm releaseLanterns() -->
+        <button class="btn-confetti" onclick="releaseLanterns()" data-aos="fade-up">Thả Đèn Lồng Cầu Nguyện 🏮</button>
     </section>
 
     <!-- Thư viện JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
         // 1. Khởi tạo hiệu ứng cuộn
@@ -367,23 +399,39 @@
             "retina_detect": true
         });
 
-        // 4. Hiệu ứng pháo giấy
-        function shootConfetti() {
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
+        // 4. Hiệu ứng thả đèn lồng
+        function releaseLanterns() {
+            const numLanterns = 40; // Số lượng đèn lồng
+            
+            for (let i = 0; i < numLanterns; i++) {
+                setTimeout(() => {
+                    const lantern = document.createElement('div');
+                    lantern.classList.add('lantern');
+                    
+                    // Vị trí ngẫu nhiên theo chiều ngang
+                    lantern.style.left = Math.random() * 100 + 'vw';
+                    
+                    // Kích thước ngẫu nhiên
+                    const size = Math.random() * 20 + 30; 
+                    lantern.style.width = size + 'px';
+                    lantern.style.height = (size * 1.5) + 'px';
+                    
+                    // Tốc độ bay ngẫu nhiên (từ 5s đến 10s)
+                    const duration = Math.random() * 5 + 5; 
+                    lantern.style.animationDuration = duration + 's';
+                    
+                    // Góc nghiêng ban đầu
+                    lantern.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+                    
+                    document.body.appendChild(lantern);
+                    
+                    // Xóa đèn lồng sau khi bay xong để nhẹ web
+                    setTimeout(() => {
+                        lantern.remove();
+                    }, duration * 1000);
+                    
+                }, i * 150); // Mỗi 0.15s sẽ có 1 đèn lồng xuất hiện
             }
-
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
         }
 
         // 5. Bật/tắt nhạc
