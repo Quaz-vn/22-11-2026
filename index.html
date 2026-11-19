@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri Ân Thầy Cô 20/11</title>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Nền hạt bay & Cánh hoa -->
+    <div id="particles-js"></div>
+    <div id="petals-container"></div>
+
+<!-- MUSIC PLAYER -->
+<audio id="bg-music" preload="none"></audio>
+<audio id="sfx-click" preload="auto" src="assets/click.mp3"></audio>
+<audio id="sfx-pop" preload="auto" src="assets/pop.mp3"></audio>
+
+<button class="music-btn" id="music-btn" onclick="toggleMusicPanel()" title="Mở trình phát nhạc">
+    <i class="fas fa-music"></i>
+</button>
+
+<div class="music-panel" id="music-panel">
+    <div class="music-header">
+        <div>
+            <span class="music-small-title">SPECIAL PLAYLIST</span>
+            <h3><i class="fas fa-headphones"></i> Giai Điệu Tri Ân</h3>
+        </div>
+        <button class="music-close" onclick="toggleMusicPanel()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="music-now-playing">
+        <div class="music-cover">
+            <i class="fas fa-music"></i>
+        </div>
+        <div class="music-info">
+            <strong id="music-title">Happy Teacher's Day</strong>
+            <span id="music-artist">theorienvibes</span>
+        </div>
+    </div>
+
+    <select id="music-select" aria-label="Chọn bài hát">
+        <option value="0">Happy Teacher's Day</option>
+        <option value="1">Your Kindness is Magical</option>
+        <option value="2">Grateful Heart</option>
+    </select>
+
+    <div class="music-progress">
+        <input type="range" id="music-progress" min="0" max="100" value="0">
+        <div class="music-time">
+            <span id="music-current-time">0:00</span>
+            <span id="music-duration">0:00</span>
+        </div>
+    </div>
+
+    <div class="music-controls">
+        <button onclick="previousTrack()" title="Bài trước">
+            <i class="fas fa-backward-step"></i>
+        </button>
+        <button class="music-play-btn" id="music-play-btn" onclick="toggleMusic()" title="Phát hoặc tạm dừng">
+            <i class="fas fa-play"></i>
+        </button>
+        <button onclick="nextTrack()" title="Bài tiếp theo">
+            <i class="fas fa-forward-step"></i>
+        </button>
+    </div>
+
+    <div class="music-setting">
+        <label for="music-volume">
+            <i class="fas fa-volume-high"></i>
+            Âm lượng nhạc
+            <span id="music-volume-value">50%</span>
+        </label>
+        <input type="range" id="music-volume" min="0" max="100" value="50">
+    </div>
+
+    <div class="music-divider"></div>
+
+    <div class="music-setting">
+        <label>
+            <i class="fas fa-wand-magic-sparkles"></i>
+            Hiệu ứng âm thanh
+            <input type="checkbox" id="sfx-toggle" checked>
+        </label>
+    </div>
+
+    <div class="music-setting">
+        <label for="sfx-volume">
+            <i class="fas fa-volume-low"></i>
+            Âm lượng hiệu ứng
+            <span id="sfx-volume-value">60%</span>
+        </label>
+        <input type="range" id="sfx-volume" min="0" max="100" value="60">
+    </div>
+</div>
+
+<!-- ÂM THANH HIỆU ỨNG -->
+<audio id="sfx-click" preload="auto" src="sounds/ui-click.mp3"></audio>
+
+    <!-- PHẦN 1: MÀN HÌNH CHÀO -->
+    <section class="hero">
+        <h1 data-aos="zoom-in" data-aos-duration="1500">20/11 - Ngày Nhà Giáo Việt Nam</h1>
+        <div id="typed-text"></div>
+        <a href="#buc-thu" class="btn-enter" data-aos="fade-up" data-aos-delay="500">Bước vào khu vườn kỷ niệm</a>
+    </section>
+
+    <!-- PHẦN 2: BỨC THƯ -->
+    <section id="buc-thu" class="letter-section">
+        <div class="letter-box" data-aos="fade-up" data-aos-duration="1000">
+            <h2>Gửi Thầy Cô kính yêu,</h2>
+            <p>Nhân ngày Nhà giáo Việt Nam 20/11, em muốn gửi đến thầy cô những lời tri ân sâu sắc nhất. Cảm ơn thầy cô đã không quản ngại khó khăn, luôn kiên nhẫn dìu dắt chúng em trên con đường tri thức.</p>
+            <p>Những bài giảng của thầy cô không chỉ là những con số, những công thức, mà còn là những bài học làm người quý giá. Có những lúc chúng em lười biếng, làm thầy cô buồn lòng, nhưng tình yêu thương và sự bao dung của thầy cô chưa bao giờ vơi cạn.</p>
+            <p>Chúc thầy cô luôn mạnh khỏe, hạnh phúc và mãi giữ ngọn lửa nhiệt huyết để tiếp tục dẫn dắt những thế hệ học trò tiếp theo.</p>
+            <p style="text-align: right; font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: #d4af37; margin-top: 30px;">Quân 9B4</p>
+        </div>
+    </section>
+
+    <!-- PHẦN 3: DÒNG THỜI GIAN -->
+    <section class="timeline-section">
+        <h2 class="timeline-title" data-aos="fade-right">Những Khoảnh Khắc Đáng Nhớ</h2>
+        
+        <div style="text-align: center; margin-bottom: 30px;" data-aos="fade-up">
+            <button class="btn-enter" id="open-memory-btn">Thêm Kỷ Niệm Của Bạn 📸</button>
+        </div>
+
+        <div class="timeline" id="timeline-container">
+            <!-- Kỷ niệm mặc định -->
+            <div class="container-timeline left" data-aos="fade-right">
+                <div class="content-timeline">
+                    <h3>Những ngày mới đến trường</h3>
+                    <p>Thầy cô đã dìu dắt em bước vào ngôi trường mới - THCS Bình Thủy.</p>
+                    <img src="ki-niem-1.jpg" class="zoomable" alt="Kỷ niệm 1">
+                </div>
+            </div>
+            <div class="container-timeline right" data-aos="fade-left">
+                <div class="content-timeline">
+                    <h3>Những năm tháng bên mái trường</h3>
+                    <p>Em trân quý những trải nghiệm và kỉ niệm mà thầy cô và mái trường đã mang đến cho em.</p>
+                    <img src="ki-niem-2.jpg" class="zoomable" alt="Kỷ niệm 2">
+                </div>
+            </div>
+            <div class="container-timeline left" data-aos="fade-right">
+                <div class="content-timeline">
+                    <h3>Lời Cảm Ơn Chân Thành</h3>
+                    <p>Cảm ơn thầy cô vì đã luôn là người lái đò tận tụy, đưa em đến bến bờ tri thức.</p>
+                    <img src="ki-niem-3.jpg" class="zoomable" alt="Kỷ niệm 3">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHẦN 4: BẢNG ĐEN LƯU BÚT -->
+    <section class="chalkboard-section">
+        <h2 class="timeline-title" data-aos="fade-up">Bảng Đen Lưu Bút</h2>
+        <p style="text-align: center; color: #aaa; margin-bottom: 20px;">Dùng chuột hoặc ngón tay để vẽ và viết lên bảng</p>
+        
+        <div class="chalkboard-container" data-aos="zoom-in">
+            <canvas id="chalkboard" width="800" height="400"></canvas>
+            <div class="chalk-controls">
+                <button class="btn-cancel" onclick="clearBoard()">Xóa Bảng</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHẦN 5: VƯỜN HOA TRI ÂN -->
+    <section class="garden-section">
+        <h2 class="timeline-title" data-aos="fade-up">Vườn Hoa Tri Ân</h2>
+        <p style="text-align: center; color: #aaa; margin-bottom: 20px;">Mỗi lời chúc là một bông hoa. Nhấp vào hoa để đọc lời chúc!</p>
+        
+        <div style="text-align: center; margin-bottom: 30px;" data-aos="fade-up">
+            <button class="btn-enter" id="open-wish-btn">Gửi Lời Chúc (Trồng Hoa) 🌱</button>
+        </div>
+
+        <div class="garden-container" id="garden-container" data-aos="fade-up">
+            <!-- Hoa sẽ mọc ở đây -->
+        </div>
+    </section>
+
+    <!-- PHẦN 6: LỜI KẾT -->
+    <section class="footer-section">
+        <h2 data-aos="zoom-in">Chúc mừng Ngày Nhà giáo Việt Nam!</h2>
+        <p data-aos="fade-up">Hãy nhấn vào nút bên dưới để gửi đi ngàn lời chúc tốt đẹp nhất!</p>
+        <button class="btn-confetti" onclick="releaseLanterns()" data-aos="fade-up">Thả Đèn Lồng Cầu Nguyện 🏮</button>
+    </section>
+
+    <!-- MODAL: LIGHTBOX -->
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox">&times;</span>
+        <img id="lightbox-img" src="" alt="Zoomed Image">
+    </div>
+
+    <!-- MODAL: THÊM KỶ NIỆM -->
+    <div class="modal-overlay" id="memory-modal">
+        <div class="modal-content">
+            <h3>Thêm Kỷ Niệm Của Bạn</h3>
+            <input type="text" id="memory-title" placeholder="Tiêu đề kỷ niệm (VD: Ngày hội thể thao)" maxlength="50">
+            <textarea id="memory-text" placeholder="Kể lại kỷ niệm của bạn..." rows="3" maxlength="200"></textarea>
+            <input type="file" id="memory-image" accept="image/*" style="color: #ccc;">
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeModal('memory-modal')">Hủy</button>
+                <button class="btn-send" id="save-memory-btn">Lưu Kỷ Niệm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: XEM LỜI CHÚC (TỪ HOA) -->
+    <div class="modal-overlay" id="view-wish-modal">
+        <div class="modal-content" style="text-align: center;">
+            <h3 id="view-wish-title" style="color: #d4af37; font-family: 'Dancing Script'; font-size: 2rem;">Tên người gửi</h3>
+            <p id="view-wish-text" style="font-size: 1.2rem; font-style: italic; margin: 20px 0; line-height: 1.6;">Lời chúc...</p>
+            <button class="btn-send" onclick="closeModal('view-wish-modal')">Đóng</button>
+        </div>
+    </div>
+
+    <!-- MODAL: GỬI LỜI CHÚC -->
+    <div class="modal-overlay" id="wish-modal">
+        <div class="modal-content">
+            <h3>Gửi Lời Chúc Đến Thầy Cô</h3>
+            <input type="text" id="wish-name" placeholder="Tên của bạn (VD: Quân 9B4)" maxlength="50">
+            <textarea id="wish-text" placeholder="Nhập lời chúc của bạn ở đây..." rows="4" maxlength="200"></textarea>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeModal('wish-modal')">Hủy</button>
+                <button class="btn-send" id="send-wish-btn">Gieo Hạt (Gửi)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thư viện JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    
+    <script src="script.js"></script>
+    <script type="module" src="firebase.js"></script>
+</body>
+</html>
