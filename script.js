@@ -258,14 +258,234 @@ window.addEventListener('gardenDBReady', startGardenListener);
 startGardenListener();
 
 // --- NHẠC VÀ ĐÈN LỒNG ---
+
+// --- MUSIC PLAYER VÀ SOUND EFFECT ---
+
+const music = document.getElementById('bg-music');
+const musicBtn = document.getElementById('music-btn');
+const musicPanel = document.getElementById('music-panel');
+const musicPlayBtn = document.getElementById('music-play-btn');
+const musicSelect = document.getElementById('music-select');
+const musicTitle = document.getElementById('music-title');
+const musicArtist = document.getElementById('music-artist');
+const musicVolume = document.getElementById('music-volume');
+const musicVolumeValue = document.getElementById('music-volume-value');
+const musicProgress = document.getElementById('music-progress');
+const musicCurrentTime = document.getElementById('music-current-time');
+const musicDuration = document.getElementById('music-duration');
+
+const sfxClick = document.getElementById('sfx-click');
+const sfxPop = document.getElementById('sfx-pop');
+const sfxToggle = document.getElementById('sfx-toggle');
+const sfxVolume = document.getElementById('sfx-volume');
+const sfxVolumeValue = document.getElementById('sfx-volume-value');
+
+const playlist = [
+    {
+        title: "Happy Teacher's Day",
+        artist: "theorienvibes",
+        src: "assets/happy-teachers-day.mp3"
+    },
+    {
+        title: "Your Kindness is Magical",
+        artist: "NadiaCripps",
+        src: "assets/kindness-piano.mp3"
+    },
+    {
+        title: "Grateful Heart",
+        artist: "theorienvibes",
+        src: "assets/grateful-heart.mp3"
+    }
+];
+
+let currentTrack = 0;
 let isPlaying = false;
-function toggleMusic() {
-    const music = document.getElementById('bg-music');
-    const btn = document.getElementById('music-btn');
-    if (isPlaying) { music.pause(); btn.innerHTML = '<i class="fas fa-music"></i>'; }
-    else { music.play(); btn.innerHTML = '<i class="fas fa-pause"></i>'; }
-    isPlaying = !isPlaying;
+
+function formatTime(seconds) {
+    if (!Number.isFinite(seconds)) return "0:00";
+
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+
+    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
 }
+
+function updateMusicButton() {
+    musicPlayBtn.innerHTML = isPlaying
+        ? '<i class="fas fa-pause"></i>'
+        : '<i class="fas fa-play"></i>';
+
+    musicBtn.innerHTML = isPlaying
+        ? '<i class="fas fa-pause"></i>'
+        : '<i class="fas fa-music"></i>';
+
+    musicBtn.classList.toggle('playing', isPlaying);
+}
+
+function loadTrack(index, autoplay = false) {
+    currentTrack = (index + playlist.length) % playlist.length;
+
+    const track = playlist[currentTrack];
+
+    music.src = track.src;
+    musicTitle.textContent = track.title;
+    musicArtist.textContent = track.artist;
+    musicSelect.value = currentTrack;
+
+    musicProgress.value = 0;
+    musicCurrentTime.textContent = "0:00";
+    musicDuration.textContent = "0:00";
+
+    if (autoplay) {
+        playMusic();
+    } else {
+        music.pause();
+        isPlaying = false;
+        updateMusicButton();
+    }
+}
+
+async function playMusic() {
+    try {
+        await music.play();
+        isPlaying = true;
+        updateMusicButton();
+    } catch (error) {
+        isPlaying = false;
+        updateMusicButton();
+        console.error("Không thể phát nhạc:", error);
+        alert("Không thể phát nhạc. Hãy kiểm tra các tệp MP3 trong thư mục assets!");
+    }
+}
+
+function pauseMusic() {
+    music.pause();
+    isPlaying = false;
+    updateMusicButton();
+}
+
+function toggleMusic() {
+    if (isPlaying) {
+        pauseMusic();
+    } else {
+        playMusic();
+    }
+}
+
+function toggleMusicPanel() {
+    musicPanel.classList.toggle('active');
+}
+
+function nextTrack() {
+    loadTrack(currentTrack + 1, true);
+}
+
+function previousTrack() {
+    if (music.currentTime > 3) {
+        music.currentTime = 0;
+    } else {
+        loadTrack(currentTrack - 1, true);
+    }
+}
+
+musicSelect.addEventListener('change', () => {
+    loadTrack(Number(musicSelect.value), true);
+});
+
+music.addEventListener('ended', nextTrack);
+
+music.addEventListener('timeupdate', () => {
+    if (!Number.isFinite(music.duration)) return;
+
+    musicProgress.value = (music.currentTime / music.duration) * 100;
+    musicCurrentTime.textContent = formatTime(music.currentTime);
+});
+
+music.addEventListener('loadedmetadata', () => {
+    musicDuration.textContent = formatTime(music.duration);
+});
+
+music.addEventListener('play', () => {
+    isPlaying = true;
+    updateMusicButton();
+});
+
+music.addEventListener('pause', () => {
+    isPlaying = false;
+    updateMusicButton();
+});
+
+musicProgress.addEventListener('input', () => {
+    if (Number.isFinite(music.duration)) {
+        music.currentTime = (musicProgress.value / 100) * music.duration;
+    }
+});
+
+musicVolume.addEventListener('input', () => {
+    music.volume = musicVolume.value / 100;
+    musicVolumeValue.textContent = musicVolume.value + '%';
+    localStorage.setItem('musicVolume', musicVolume.value);
+});
+
+function setSfxVolume() {
+    const volume = sfxVolume.value / 100;
+
+    sfxClick.volume = volume;
+    sfxPop.volume = volume;
+
+    sfxVolumeValue.textContent = sfxVolume.value + '%';
+    localStorage.setItem('sfxVolume', sfxVolume.value);
+}
+
+sfxVolume.addEventListener('input', setSfxVolume);
+
+sfxToggle.addEventListener('change', () => {
+    localStorage.setItem('sfxEnabled', sfxToggle.checked);
+});
+
+function playSfx(type = 'click') {
+    if (!sfxToggle.checked) return;
+
+    const sound = type === 'pop' ? sfxPop : sfxClick;
+
+    sound.currentTime = 0;
+    sound.play().catch(error => {
+        console.warn("Không thể phát sound effect:", error);
+    });
+}
+
+document.addEventListener('click', event => {
+    const button = event.target.closest('button, a');
+
+    if (button && !button.classList.contains('music-btn')) {
+        playSfx('click');
+    }
+
+    if (event.target.closest('.flower, .btn-confetti')) {
+        playSfx('pop');
+    }
+});
+
+// Khôi phục cài đặt âm thanh
+const savedMusicVolume = localStorage.getItem('musicVolume');
+const savedSfxVolume = localStorage.getItem('sfxVolume');
+const savedSfxEnabled = localStorage.getItem('sfxEnabled');
+
+musicVolume.value = savedMusicVolume ?? 50;
+music.volume = musicVolume.value / 100;
+musicVolumeValue.textContent = musicVolume.value + '%';
+
+sfxVolume.value = savedSfxVolume ?? 60;
+sfxToggle.checked = savedSfxEnabled === null
+    ? true
+    : savedSfxEnabled === 'true';
+
+setSfxVolume();
+
+loadTrack(0);
+
+// --- KẾT THÚC MUSIC PLAYER ---
+
 
 function releaseLanterns() {
     const numLanterns = 40;

@@ -188,3 +188,252 @@ body {
     .hero h1 { font-size: 2rem; }
     #typed-text { font-size: 1.2rem; }
 }
+
+/* ================= MUSIC PLAYER ================= */
+
+.music-btn {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 55px;
+    height: 55px;
+    border: 1px solid rgba(212, 175, 55, 0.7);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d4af37, #a77b20);
+    color: #fff;
+    font-size: 21px;
+    cursor: pointer;
+    z-index: 9998;
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.35);
+    transition: 0.3s;
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+}
+
+.music-btn.playing i {
+    animation: musicRotate 3s linear infinite;
+}
+
+@keyframes musicRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.music-panel {
+    position: fixed;
+    right: 25px;
+    bottom: 92px;
+    width: 320px;
+    max-width: calc(100vw - 30px);
+    padding: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    border-radius: 18px;
+    background: rgba(20, 24, 29, 0.97);
+    color: #f5f0df;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    z-index: 9997;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px) scale(0.97);
+    transform-origin: bottom right;
+    transition: 0.3s ease;
+}
+
+.music-panel.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.music-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.music-small-title {
+    color: #d4af37;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.music-header h3 {
+    margin: 5px 0 0;
+    color: #f0d98a;
+    font-size: 18px;
+}
+
+.music-close {
+    border: none;
+    background: transparent;
+    color: #ccc;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.music-now-playing {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.music-cover {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d4af37, #8e6921);
+    color: white;
+    font-size: 22px;
+}
+
+.music-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.music-info strong {
+    color: #f7df98;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.music-info span {
+    color: #aaa;
+    font-size: 11px;
+}
+
+#music-select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 9px;
+    outline: none;
+    background: #292c30;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#music-select option {
+    background: #292c30;
+    color: white;
+}
+
+.music-progress {
+    margin-top: 18px;
+}
+
+.music-progress input,
+.music-setting input[type="range"] {
+    width: 100%;
+    height: 5px;
+    accent-color: #d4af37;
+    cursor: pointer;
+}
+
+.music-time {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    color: #aaa;
+    font-size: 10px;
+}
+
+.music-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin: 15px 0 20px;
+}
+
+.music-controls button {
+    border: none;
+    background: transparent;
+    color: #e5cf8a;
+    font-size: 19px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.music-controls button:hover {
+    color: #fff;
+    transform: scale(1.15);
+}
+
+.music-controls .music-play-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d4af37, #a77b20);
+    color: #fff;
+    font-size: 19px;
+}
+
+.music-setting {
+    margin-top: 15px;
+}
+
+.music-setting label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: #ddd;
+    font-size: 12px;
+}
+
+.music-setting label i {
+    width: 15px;
+    color: #d4af37;
+}
+
+.music-setting label span {
+    margin-left: auto;
+    color: #e7ce83;
+    font-size: 11px;
+}
+
+.music-setting input[type="checkbox"] {
+    margin-left: auto;
+    width: 17px;
+    height: 17px;
+    accent-color: #d4af37;
+    cursor: pointer;
+}
+
+.music-divider {
+    height: 1px;
+    margin: 17px 0;
+    background: rgba(212, 175, 55, 0.2);
+}
+
+@media (max-width: 480px) {
+    .music-btn {
+        right: 15px;
+        bottom: 15px;
+    }
+
+    .music-panel {
+        right: 15px;
+        bottom: 82px;
+    }
+}

@@ -17,13 +17,93 @@
     <div id="particles-js"></div>
     <div id="petals-container"></div>
 
-    <!-- Nút bật nhạc -->
-    <audio id="bg-music" loop>
-        <source src="nguoi-gieo-mam-xanh.mp4" type="audio/mpeg">
-    </audio>
-    <button class="music-btn" id="music-btn" onclick="toggleMusic()">
-        <i class="fas fa-music"></i>
-    </button>
+<!-- MUSIC PLAYER -->
+<audio id="bg-music" preload="none"></audio>
+<audio id="sfx-click" preload="auto" src="assets/click.mp3"></audio>
+<audio id="sfx-pop" preload="auto" src="assets/pop.mp3"></audio>
+
+<button class="music-btn" id="music-btn" onclick="toggleMusicPanel()" title="Mở trình phát nhạc">
+    <i class="fas fa-music"></i>
+</button>
+
+<div class="music-panel" id="music-panel">
+    <div class="music-header">
+        <div>
+            <span class="music-small-title">SPECIAL PLAYLIST</span>
+            <h3><i class="fas fa-headphones"></i> Giai Điệu Tri Ân</h3>
+        </div>
+        <button class="music-close" onclick="toggleMusicPanel()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="music-now-playing">
+        <div class="music-cover">
+            <i class="fas fa-music"></i>
+        </div>
+        <div class="music-info">
+            <strong id="music-title">Happy Teacher's Day</strong>
+            <span id="music-artist">theorienvibes</span>
+        </div>
+    </div>
+
+    <select id="music-select" aria-label="Chọn bài hát">
+        <option value="0">Happy Teacher's Day</option>
+        <option value="1">Your Kindness is Magical</option>
+        <option value="2">Grateful Heart</option>
+    </select>
+
+    <div class="music-progress">
+        <input type="range" id="music-progress" min="0" max="100" value="0">
+        <div class="music-time">
+            <span id="music-current-time">0:00</span>
+            <span id="music-duration">0:00</span>
+        </div>
+    </div>
+
+    <div class="music-controls">
+        <button onclick="previousTrack()" title="Bài trước">
+            <i class="fas fa-backward-step"></i>
+        </button>
+        <button class="music-play-btn" id="music-play-btn" onclick="toggleMusic()" title="Phát hoặc tạm dừng">
+            <i class="fas fa-play"></i>
+        </button>
+        <button onclick="nextTrack()" title="Bài tiếp theo">
+            <i class="fas fa-forward-step"></i>
+        </button>
+    </div>
+
+    <div class="music-setting">
+        <label for="music-volume">
+            <i class="fas fa-volume-high"></i>
+            Âm lượng nhạc
+            <span id="music-volume-value">50%</span>
+        </label>
+        <input type="range" id="music-volume" min="0" max="100" value="50">
+    </div>
+
+    <div class="music-divider"></div>
+
+    <div class="music-setting">
+        <label>
+            <i class="fas fa-wand-magic-sparkles"></i>
+            Hiệu ứng âm thanh
+            <input type="checkbox" id="sfx-toggle" checked>
+        </label>
+    </div>
+
+    <div class="music-setting">
+        <label for="sfx-volume">
+            <i class="fas fa-volume-low"></i>
+            Âm lượng hiệu ứng
+            <span id="sfx-volume-value">60%</span>
+        </label>
+        <input type="range" id="sfx-volume" min="0" max="100" value="60">
+    </div>
+</div>
+
+<!-- ÂM THANH HIỆU ỨNG -->
+<audio id="sfx-click" preload="auto" src="sounds/ui-click.mp3"></audio>
 
     <!-- PHẦN 1: MÀN HÌNH CHÀO -->
     <section class="hero">
