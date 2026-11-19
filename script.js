@@ -179,28 +179,27 @@ canvas.addEventListener('touchmove', draw, {passive: false});
 canvas.addEventListener('touchend', stopDrawing);
 
 // --- CHỨC NĂNG VƯỜN HOA TRI ÂN ---
+// --- CHỨC NĂNG VƯỜN HOA TRI ÂN ---
 const wishModal = document.getElementById('wish-modal');
 const openWishBtn = document.getElementById('open-wish-btn');
 const sendWishBtn = document.getElementById('send-wish-btn');
 const gardenContainer = document.getElementById('garden-container');
-
 const viewWishModal = document.getElementById('view-wish-modal');
 const viewWishTitle = document.getElementById('view-wish-title');
 const viewWishText = document.getElementById('view-wish-text');
 
-openWishBtn.addEventListener('click', () => wishModal.classList.add('active'));
+openWishBtn.addEventListener('click', () => {
+    wishModal.classList.add('active');
+});
 
 function plantFlower(name, text) {
     const flower = document.createElement('div');
     flower.className = 'flower';
-    // Chọn ngẫu nhiên 1 bông hoa
+
     const flowers = ['🌻', '🌹', '🌷', '🌺', '🌸'];
     flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
-    
-    // Random thời gian lắc lư để vườn hoa trông tự nhiên hơn
     flower.style.animationDuration = (Math.random() * 2 + 2) + 's';
 
-    // Khi click vào hoa -> hiện lời chúc
     flower.addEventListener('click', () => {
         viewWishTitle.innerText = "- " + name + " -";
         viewWishText.innerText = text;
@@ -210,29 +209,53 @@ function plantFlower(name, text) {
     gardenContainer.appendChild(flower);
 }
 
-sendWishBtn.addEventListener('click', () => {
+sendWishBtn.addEventListener('click', async () => {
     const name = document.getElementById('wish-name').value.trim();
     const text = document.getElementById('wish-text').value.trim();
 
-    if (!name || !text) return alert('Vui lòng nhập đầy đủ tên và lời chúc nhé!');
+    if (!name || !text) {
+        return alert('Vui lòng nhập đầy đủ tên và lời chúc nhé!');
+    }
 
-    plantFlower(name, text);
-    
-    // Lưu lại
-    const savedWishes = JSON.parse(localStorage.getItem('gardenWishes')) || [];
-    savedWishes.push({ name, text });
-    localStorage.setItem('gardenWishes', JSON.stringify(savedWishes));
+    if (!window.gardenDB) {
+        return alert('Firebase chưa kết nối. Vui lòng tải lại trang!');
+    }
 
-    document.getElementById('wish-name').value = '';
-    document.getElementById('wish-text').value = '';
-    closeModal('wish-modal');
+    sendWishBtn.disabled = true;
+
+    try {
+        await window.gardenDB.addWish(name, text);
+
+        document.getElementById('wish-name').value = '';
+        document.getElementById('wish-text').value = '';
+
+        closeModal('wish-modal');
+    } catch (error) {
+        console.error('Lỗi gửi lời chúc:', error);
+        alert('Không thể gửi lời chúc. Hãy kiểm tra kết nối Firebase!');
+    } finally {
+        sendWishBtn.disabled = false;
+    }
 });
 
-function loadGarden() {
-    const savedWishes = JSON.parse(localStorage.getItem('gardenWishes')) || [];
-    savedWishes.forEach(wish => plantFlower(wish.name, wish.text));
+function startGardenListener() {
+    if (!window.gardenDB || startGardenListener.started) return;
+    startGardenListener.started = true;
+
+    window.gardenDB.listen(wishes => {
+        gardenContainer.innerHTML = '';
+
+        wishes.forEach(wish => {
+            plantFlower(wish.name, wish.text);
+        });
+    }, error => {
+        console.error('Lỗi tải lời chúc:', error);
+        alert('Không thể tải khu vườn lời chúc!');
+    });
 }
-loadGarden();
+
+window.addEventListener('gardenDBReady', startGardenListener);
+startGardenListener();
 
 // --- NHẠC VÀ ĐÈN LỒNG ---
 let isPlaying = false;
