@@ -282,9 +282,14 @@ const sfxVolumeValue = document.getElementById('sfx-volume-value');
 
 const playlist = [
     {
+        title: "Người gieo mầm xanh",
+        artist: "theorienvibes",
+        src: "assets/nguoi-gieo-mam-xanh.mp3"
+    },
+    {
         title: "Happy Teacher's Day",
         artist: "theorienvibes",
-        src: "assets/happy-teachers-day.mp3"
+        src: "assets/happy-teacher-day.mp3"
     },
     {
         title: "Your Kindness is Magical",
@@ -294,7 +299,7 @@ const playlist = [
     {
         title: "Grateful Heart",
         artist: "theorienvibes",
-        src: "assets/grateful-heart.mp3"
+        src: "assets/thank-you.mp3"
     }
 ];
 
@@ -483,6 +488,13 @@ sfxToggle.checked = savedSfxEnabled === null
 setSfxVolume();
 
 loadTrack(0);
+
+// Trình duyệt yêu cầu tương tác đầu tiên mới cho phép phát âm thanh.
+document.addEventListener('pointerdown', () => {
+    if (!isPlaying) {
+        playMusic();
+    }
+}, { once: true });
 
 // --- KẾT THÚC MUSIC PLAYER ---
 
