@@ -1,3 +1,4 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
 
 import {
@@ -11,7 +12,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCvXtB_-pxjM3Q_e5y4BKBHPaB7963SJ_g",
+    apiKey: "AIzaSyCvXtB_-pxj3M3Q_e5y4BKBHPaB7963SJ_g",
     authDomain: "project-6396783167638380323.firebaseapp.com",
     projectId: "project-6396783167638380323",
     storageBucket: "project-6396783167638380323.firebasestorage.app",
@@ -46,4 +47,5 @@ window.gardenDB = {
         }, onError);
     }
 };
+
 window.dispatchEvent(new Event('gardenDBReady'));
