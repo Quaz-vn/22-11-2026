@@ -5,20 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tri Ân Thầy Cô 20/11</title>
     
-    <!-- Thư viện hiệu ứng -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Font chữ -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <!-- File CSS riêng -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Nền hạt bay -->
+    <!-- Nền hạt bay & Cánh hoa -->
     <div id="particles-js"></div>
+    <div id="petals-container"></div>
 
     <!-- Nút bật nhạc -->
     <audio id="bg-music" loop>
@@ -60,48 +57,65 @@
                 <div class="content-timeline">
                     <h3>Những ngày mới đến trường</h3>
                     <p>Thầy cô đã dìu dắt em bước vào ngôi trường mới - THCS Bình Thủy.</p>
-                    <img src="ki-niem-1.jpg" alt="Kỷ niệm 1">
+                    <img src="ki-niem-1.jpg" class="zoomable" alt="Kỷ niệm 1">
                 </div>
             </div>
             <div class="container-timeline right" data-aos="fade-left">
                 <div class="content-timeline">
                     <h3>Những năm tháng bên mái trường</h3>
                     <p>Em trân quý những trải nghiệm và kỉ niệm mà thầy cô và mái trường đã mang đến cho em.</p>
-                    <img src="ki-niem-2.jpg" alt="Kỷ niệm 2">
+                    <img src="ki-niem-2.jpg" class="zoomable" alt="Kỷ niệm 2">
                 </div>
             </div>
             <div class="container-timeline left" data-aos="fade-right">
                 <div class="content-timeline">
                     <h3>Lời Cảm Ơn Chân Thành</h3>
                     <p>Cảm ơn thầy cô vì đã luôn là người lái đò tận tụy, đưa em đến bến bờ tri thức.</p>
-                    <img src="ki-niem-3.jpg" alt="Kỷ niệm 3">
+                    <img src="ki-niem-3.jpg" class="zoomable" alt="Kỷ niệm 3">
                 </div>
             </div>
-            <!-- Kỷ niệm mới sẽ được JS chèn vào đây -->
         </div>
     </section>
 
-    <!-- PHẦN 3.5: GÓC LỜI CHÚC -->
-    <section class="wishes-section">
-        <h2 class="timeline-title" data-aos="fade-up">Góc Lời Chúc Từ Học Sinh</h2>
-        <div style="text-align: center; margin-bottom: 40px;" data-aos="fade-up">
-            <button class="btn-enter" id="open-wish-btn">Viết Lời Chúc Của Bạn ✍️</button>
-        </div>
-        <div class="wishes-container" id="wishes-container">
-            <!-- Lời chúc mặc định -->
-            <div class="wish-card">
-                <p>"Chúc thầy cô luôn tràn đầy sức khỏe và nhiệt huyết!"</p>
-                <span>- Một học sinh ẩn danh</span>
+    <!-- PHẦN 4: BẢNG ĐEN LƯU BÚT -->
+    <section class="chalkboard-section">
+        <h2 class="timeline-title" data-aos="fade-up">Bảng Đen Lưu Bút</h2>
+        <p style="text-align: center; color: #aaa; margin-bottom: 20px;">Dùng chuột hoặc ngón tay để vẽ và viết lên bảng</p>
+        
+        <div class="chalkboard-container" data-aos="zoom-in">
+            <canvas id="chalkboard" width="800" height="400"></canvas>
+            <div class="chalk-controls">
+                <button class="btn-cancel" onclick="clearBoard()">Xóa Bảng</button>
             </div>
         </div>
     </section>
 
-    <!-- PHẦN 4: LỜI KẾT -->
+    <!-- PHẦN 5: VƯỜN HOA TRI ÂN -->
+    <section class="garden-section">
+        <h2 class="timeline-title" data-aos="fade-up">Vườn Hoa Tri Ân</h2>
+        <p style="text-align: center; color: #aaa; margin-bottom: 20px;">Mỗi lời chúc là một bông hoa. Nhấp vào hoa để đọc lời chúc!</p>
+        
+        <div style="text-align: center; margin-bottom: 30px;" data-aos="fade-up">
+            <button class="btn-enter" id="open-wish-btn">Gửi Lời Chúc (Trồng Hoa) 🌱</button>
+        </div>
+
+        <div class="garden-container" id="garden-container" data-aos="fade-up">
+            <!-- Hoa sẽ mọc ở đây -->
+        </div>
+    </section>
+
+    <!-- PHẦN 6: LỜI KẾT -->
     <section class="footer-section">
         <h2 data-aos="zoom-in">Chúc mừng Ngày Nhà giáo Việt Nam!</h2>
         <p data-aos="fade-up">Hãy nhấn vào nút bên dưới để gửi đi ngàn lời chúc tốt đẹp nhất!</p>
         <button class="btn-confetti" onclick="releaseLanterns()" data-aos="fade-up">Thả Đèn Lồng Cầu Nguyện 🏮</button>
     </section>
+
+    <!-- MODAL: LIGHTBOX -->
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox">&times;</span>
+        <img id="lightbox-img" src="" alt="Zoomed Image">
+    </div>
 
     <!-- MODAL: THÊM KỶ NIỆM -->
     <div class="modal-overlay" id="memory-modal">
@@ -117,6 +131,15 @@
         </div>
     </div>
 
+    <!-- MODAL: XEM LỜI CHÚC (TỪ HOA) -->
+    <div class="modal-overlay" id="view-wish-modal">
+        <div class="modal-content" style="text-align: center;">
+            <h3 id="view-wish-title" style="color: #d4af37; font-family: 'Dancing Script'; font-size: 2rem;">Tên người gửi</h3>
+            <p id="view-wish-text" style="font-size: 1.2rem; font-style: italic; margin: 20px 0; line-height: 1.6;">Lời chúc...</p>
+            <button class="btn-send" onclick="closeModal('view-wish-modal')">Đóng</button>
+        </div>
+    </div>
+
     <!-- MODAL: GỬI LỜI CHÚC -->
     <div class="modal-overlay" id="wish-modal">
         <div class="modal-content">
@@ -125,7 +148,7 @@
             <textarea id="wish-text" placeholder="Nhập lời chúc của bạn ở đây..." rows="4" maxlength="200"></textarea>
             <div class="modal-buttons">
                 <button class="btn-cancel" onclick="closeModal('wish-modal')">Hủy</button>
-                <button class="btn-send" id="send-wish-btn">Gửi Lời Chúc</button>
+                <button class="btn-send" id="send-wish-btn">Gieo Hạt (Gửi)</button>
             </div>
         </div>
     </div>
@@ -135,7 +158,6 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     
-    <!-- File JS riêng -->
     <script src="script.js"></script>
 </body>
 </html>

@@ -11,52 +11,79 @@ var typed = new Typed('#typed-text', {
 particlesJS("particles-js", {
     "particles": {
         "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-        "color": { "value": "#d4af37" },
-        "shape": { "type": "circle" },
-        "opacity": { "value": 0.5, "random": true },
-        "size": { "value": 3, "random": true },
-        "line_linked": { "enable": false },
-        "move": { "enable": true, "speed": 1, "direction": "none", "random": true, "out_mode": "out" }
-    },
-    "interactivity": {
-        "events": { "onhover": { "enable": true, "mode": "bubble" } },
-        "modes": { "bubble": { "distance": 200, "size": 5, "duration": 2 } }
-    },
-    "retina_detect": true
+        "color": { "value": "#d4af37" }, "shape": { "type": "circle" },
+        "opacity": { "value": 0.5, "random": true }, "size": { "value": 3, "random": true },
+        "line_linked": { "enable": false }, "move": { "enable": true, "speed": 1, "out_mode": "out" }
+    }
 });
 
-// 4. Đóng/Mở Modal chung
+// 4. Hiệu ứng cánh hoa rơi
+const petalsContainer = document.getElementById('petals-container');
+const petalEmojis = ['🌸', '🌺', '🌼', '🍁']; // Các loại hoa
+
+function createPetal() {
+    const petal = document.createElement('div');
+    petal.classList.add('petal');
+    petal.innerText = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+    
+    // Kích thước và vị trí ngẫu nhiên
+    petal.style.left = Math.random() * 100 + 'vw';
+    petal.style.fontSize = Math.random() * 15 + 15 + 'px';
+    petal.style.animationDuration = Math.random() * 5 + 5 + 's'; // Rơi từ 5-10s
+    petal.style.opacity = Math.random() * 0.5 + 0.5;
+
+    petalsContainer.appendChild(petal);
+
+    // Xóa hoa sau khi rơi xong
+    setTimeout(() => petal.remove(), 10000);
+}
+setInterval(createPetal, 500); // Cứ 0.5s tạo 1 cánh hoa
+
+// 5. Xử lý đóng/mở Modal chung
 function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('active');
 }
 
-// --- CHỨC NĂNG: THÊM KỶ NIỆM ---
+// --- CHỨC NĂNG LIGHTBOX (PHÓNG TO ẢNH) ---
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const closeLightbox = document.querySelector('.close-lightbox');
+
+function setupLightbox(imgElement) {
+    imgElement.addEventListener('click', function() {
+        lightbox.style.display = "block";
+        lightboxImg.src = this.src;
+    });
+}
+// Gắn sự kiện cho ảnh có sẵn
+document.querySelectorAll('.zoomable').forEach(setupLightbox);
+// Đóng lightbox
+closeLightbox.onclick = () => lightbox.style.display = "none";
+lightbox.onclick = (e) => { if(e.target !== lightboxImg) lightbox.style.display = "none"; };
+
+// --- CHỨC NĂNG THÊM KỶ NIỆM ---
 const memoryModal = document.getElementById('memory-modal');
 const openMemoryBtn = document.getElementById('open-memory-btn');
 const saveMemoryBtn = document.getElementById('save-memory-btn');
 const timelineContainer = document.getElementById('timeline-container');
-let memoryCount = 3; // Đã có sẵn 3 kỷ niệm mặc định trong HTML
+let memoryCount = 3;
 
 openMemoryBtn.addEventListener('click', () => memoryModal.classList.add('active'));
 
-// Hàm thêm thẻ kỷ niệm vào Timeline
 function addMemoryToDOM(title, text, imgSrc, side) {
     const newMemory = document.createElement('div');
     newMemory.className = `container-timeline ${side}`;
     newMemory.setAttribute('data-aos', side === 'left' ? 'fade-right' : 'fade-left');
-    
-    // Nếu không có ảnh, ẩn thẻ img đi
-    const imgHTML = imgSrc ? `<img src="${imgSrc}" alt="Kỷ niệm">` : '';
+    const imgHTML = imgSrc ? `<img src="${imgSrc}" class="zoomable" alt="Kỷ niệm">` : '';
 
-    newMemory.innerHTML = `
-        <div class="content-timeline">
-            <h3>${title}</h3>
-            <p>${text}</p>
-            ${imgHTML}
-        </div>
-    `;
+    newMemory.innerHTML = `<div class="content-timeline"><h3>${title}</h3><p>${text}</p>${imgHTML}</div>`;
     timelineContainer.appendChild(newMemory);
-    AOS.refresh(); // Làm mới AOS để hiệu ứng hoạt động với thẻ mới
+    
+    // Nếu có ảnh mới, kích hoạt Lightbox cho ảnh đó
+    if(imgSrc) {
+        setupLightbox(newMemory.querySelector('.zoomable'));
+    }
+    AOS.refresh();
 }
 
 saveMemoryBtn.addEventListener('click', () => {
@@ -64,24 +91,16 @@ saveMemoryBtn.addEventListener('click', () => {
     const text = document.getElementById('memory-text').value.trim();
     const imageFile = document.getElementById('memory-image').files[0];
 
-    if (!title || !text) {
-        alert('Vui lòng nhập tiêu đề và nội dung kỷ niệm!');
-        return;
-    }
-
-    // Xác định bên trái/phải dựa vào số lượng hiện tại
+    if (!title || !text) return alert('Vui lòng nhập tiêu đề và nội dung!');
+    
     const side = (memoryCount % 2 === 0) ? 'left' : 'right';
 
-    // Hàm xử lý sau khi có ảnh (hoặc không có ảnh)
     const processSave = (base64Img) => {
         addMemoryToDOM(title, text, base64Img, side);
-        
-        // Lưu vào localStorage
         const memories = JSON.parse(localStorage.getItem('timelineMemories')) || [];
         memories.push({ title, text, img: base64Img, side });
         localStorage.setItem('timelineMemories', JSON.stringify(memories));
 
-        // Reset form
         document.getElementById('memory-title').value = '';
         document.getElementById('memory-text').value = '';
         document.getElementById('memory-image').value = '';
@@ -89,83 +108,139 @@ saveMemoryBtn.addEventListener('click', () => {
         memoryCount++;
     };
 
-    // Đọc file ảnh thành Base64
     if (imageFile) {
-        if (imageFile.size > 1024 * 1024) {
-            alert('Ảnh quá lớn! Vui lòng chọn ảnh dưới 1MB để web chạy mượt.');
-            return;
-        }
+        if (imageFile.size > 1024 * 1024) return alert('Ảnh quá lớn! Vui lòng chọn ảnh dưới 1MB.');
         const reader = new FileReader();
         reader.onload = (e) => processSave(e.target.result);
         reader.readAsDataURL(imageFile);
-    } else {
-        processSave(null);
-    }
+    } else processSave(null);
 });
 
-// Tải kỷ niệm đã lưu khi mở web
 function loadMemories() {
     const memories = JSON.parse(localStorage.getItem('timelineMemories')) || [];
-    memories.forEach(mem => {
-        addMemoryToDOM(mem.title, mem.text, mem.img, mem.side);
-        memoryCount++;
-    });
+    memories.forEach(mem => { addMemoryToDOM(mem.title, mem.text, mem.img, mem.side); memoryCount++; });
 }
 loadMemories();
 
-// --- CHỨC NĂNG: LỜI CHÚC ---
+// --- CHỨC NĂNG BẢNG ĐEN ---
+const canvas = document.getElementById('chalkboard');
+const ctx = canvas.getContext('2d');
+let isDrawing = false;
+
+// Thiết lập nét vẽ (màu phấn trắng)
+ctx.strokeStyle = '#ffffff';
+ctx.lineWidth = 3;
+ctx.lineCap = 'round';
+
+function getMousePos(evt) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    // Hỗ trợ cả cảm ứng (touch) và chuột (mouse)
+    let clientX = evt.clientX || (evt.touches && evt.touches[0].clientX);
+    let clientY = evt.clientY || (evt.touches && evt.touches[0].clientY);
+
+    return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+    };
+}
+
+function startDrawing(e) {
+    isDrawing = true;
+    const pos = getMousePos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+}
+function draw(e) {
+    if (!isDrawing) return;
+    e.preventDefault(); // Ngăn cuộn trang khi vẽ trên mobile
+    const pos = getMousePos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+}
+function stopDrawing() {
+    isDrawing = false;
+    ctx.closePath();
+}
+function clearBoard() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Gắn sự kiện chuột
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+// Gắn sự kiện cảm ứng (điện thoại)
+canvas.addEventListener('touchstart', startDrawing, {passive: false});
+canvas.addEventListener('touchmove', draw, {passive: false});
+canvas.addEventListener('touchend', stopDrawing);
+
+// --- CHỨC NĂNG VƯỜN HOA TRI ÂN ---
 const wishModal = document.getElementById('wish-modal');
 const openWishBtn = document.getElementById('open-wish-btn');
 const sendWishBtn = document.getElementById('send-wish-btn');
-const wishesContainer = document.getElementById('wishes-container');
+const gardenContainer = document.getElementById('garden-container');
+
+const viewWishModal = document.getElementById('view-wish-modal');
+const viewWishTitle = document.getElementById('view-wish-title');
+const viewWishText = document.getElementById('view-wish-text');
 
 openWishBtn.addEventListener('click', () => wishModal.classList.add('active'));
 
-function addWishToDOM(name, text) {
-    const card = document.createElement('div');
-    card.className = 'wish-card';
-    card.innerHTML = `<p>"${text}"</p><span>- ${name}</span>`;
-    wishesContainer.appendChild(card);
+function plantFlower(name, text) {
+    const flower = document.createElement('div');
+    flower.className = 'flower';
+    // Chọn ngẫu nhiên 1 bông hoa
+    const flowers = ['🌻', '🌹', '🌷', '🌺', '🌸'];
+    flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+    
+    // Random thời gian lắc lư để vườn hoa trông tự nhiên hơn
+    flower.style.animationDuration = (Math.random() * 2 + 2) + 's';
+
+    // Khi click vào hoa -> hiện lời chúc
+    flower.addEventListener('click', () => {
+        viewWishTitle.innerText = "- " + name + " -";
+        viewWishText.innerText = text;
+        viewWishModal.classList.add('active');
+    });
+
+    gardenContainer.appendChild(flower);
 }
 
 sendWishBtn.addEventListener('click', () => {
     const name = document.getElementById('wish-name').value.trim();
     const text = document.getElementById('wish-text').value.trim();
 
-    if (!name || !text) {
-        alert('Vui lòng nhập đầy đủ tên và lời chúc nhé!');
-        return;
-    }
+    if (!name || !text) return alert('Vui lòng nhập đầy đủ tên và lời chúc nhé!');
 
-    addWishToDOM(name, text);
+    plantFlower(name, text);
     
-    const savedWishes = JSON.parse(localStorage.getItem('teacherWishes')) || [];
+    // Lưu lại
+    const savedWishes = JSON.parse(localStorage.getItem('gardenWishes')) || [];
     savedWishes.push({ name, text });
-    localStorage.setItem('teacherWishes', JSON.stringify(savedWishes));
+    localStorage.setItem('gardenWishes', JSON.stringify(savedWishes));
 
     document.getElementById('wish-name').value = '';
     document.getElementById('wish-text').value = '';
     closeModal('wish-modal');
 });
 
-function loadWishes() {
-    const savedWishes = JSON.parse(localStorage.getItem('teacherWishes')) || [];
-    savedWishes.forEach(wish => addWishToDOM(wish.name, wish.text));
+function loadGarden() {
+    const savedWishes = JSON.parse(localStorage.getItem('gardenWishes')) || [];
+    savedWishes.forEach(wish => plantFlower(wish.name, wish.text));
 }
-loadWishes();
+loadGarden();
 
-// --- CHỨC NĂNG: NHẠC VÀ ĐÈN LỒNG ---
+// --- NHẠC VÀ ĐÈN LỒNG ---
 let isPlaying = false;
 function toggleMusic() {
     const music = document.getElementById('bg-music');
     const btn = document.getElementById('music-btn');
-    if (isPlaying) {
-        music.pause();
-        btn.innerHTML = '<i class="fas fa-music"></i>';
-    } else {
-        music.play();
-        btn.innerHTML = '<i class="fas fa-pause"></i>';
-    }
+    if (isPlaying) { music.pause(); btn.innerHTML = '<i class="fas fa-music"></i>'; }
+    else { music.play(); btn.innerHTML = '<i class="fas fa-pause"></i>'; }
     isPlaying = !isPlaying;
 }
 

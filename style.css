@@ -8,12 +8,22 @@ body {
     overflow-x: hidden;
 }
 
-/* --- HIỆU ỨNG NỀN HẠT BAY --- */
+/* --- HIỆU ỨNG NỀN & CÁNH HOA --- */
 #particles-js {
-    position: fixed;
-    width: 100%; height: 100%;
-    top: 0; left: 0; z-index: -1;
+    position: fixed; width: 100%; height: 100%;
+    top: 0; left: 0; z-index: -2;
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+}
+#petals-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: -1; overflow: hidden;
+}
+.petal {
+    position: absolute; top: -50px;
+    animation: fall linear forwards;
+}
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); }
 }
 
 /* --- PHẦN 1: HERO --- */
@@ -21,19 +31,14 @@ body {
     height: 100vh; display: flex; flex-direction: column;
     justify-content: center; align-items: center; text-align: center; padding: 20px;
 }
-.hero h1 {
-    font-size: 3rem; color: #d4af37; margin-bottom: 20px;
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-}
+.hero h1 { font-size: 3rem; color: #d4af37; margin-bottom: 20px; text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
 #typed-text { font-size: 1.5rem; color: #e0e0e0; height: 40px; margin-bottom: 40px; }
 .btn-enter {
     padding: 15px 40px; font-size: 1.2rem; background: transparent; color: #d4af37;
     border: 2px solid #d4af37; border-radius: 30px; cursor: pointer;
     transition: all 0.3s ease; text-decoration: none;
 }
-.btn-enter:hover {
-    background: #d4af37; color: #0a0a0a; box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
-}
+.btn-enter:hover { background: #d4af37; color: #0a0a0a; box-shadow: 0 0 30px rgba(212, 175, 55, 0.8); }
 
 /* --- PHẦN 2: BỨC THƯ --- */
 .letter-section { padding: 100px 20px; display: flex; justify-content: center; }
@@ -48,43 +53,63 @@ body {
 /* --- PHẦN 3: DÒNG THỜI GIAN --- */
 .timeline-section { padding: 100px 20px; max-width: 1000px; margin: 0 auto; }
 .timeline-title { text-align: center; font-size: 2.5rem; color: #d4af37; margin-bottom: 60px; font-family: 'Dancing Script', cursive; }
-
 .timeline { position: relative; max-width: 800px; margin: 0 auto; }
-/* Sợi dây timeline tự động dài ra nhờ top:0 bottom:0 */
 .timeline::after {
     content: ''; position: absolute; width: 4px; background: #d4af37;
     top: 0; bottom: 0; left: 50%; margin-left: -2px; border-radius: 2px;
 }
-
 .container-timeline { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; }
 .container-timeline.left { left: 0; }
 .container-timeline.right { left: 50%; }
-
 .container-timeline::after {
     content: ''; position: absolute; width: 20px; height: 20px;
     right: -10px; background-color: #0a0a0a; border: 4px solid #d4af37;
     top: 15px; border-radius: 50%; z-index: 1;
 }
 .container-timeline.right::after { left: -10px; }
-
 .content-timeline {
     padding: 20px 30px; background: rgba(255, 255, 255, 0.05);
     position: relative; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.3);
 }
 .content-timeline h3 { color: #d4af37; margin-bottom: 10px; }
-.content-timeline img { width: 100%; border-radius: 10px; margin-top: 10px; object-fit: cover; max-height: 300px;}
+.content-timeline img { width: 100%; border-radius: 10px; margin-top: 10px; object-fit: cover; max-height: 300px; cursor: zoom-in; transition: filter 0.3s;}
+.content-timeline img:hover { filter: brightness(1.2); }
 
-/* --- PHẦN 3.5: LỜI CHÚC --- */
-.wishes-section { padding: 100px 20px; max-width: 1000px; margin: 0 auto; }
-.wishes-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-.wish-card {
-    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.3);
-    padding: 20px; border-radius: 10px; position: relative;
+/* --- PHẦN 4: BẢNG ĐEN --- */
+.chalkboard-section { padding: 100px 20px; max-width: 900px; margin: 0 auto; }
+.chalkboard-container {
+    background: #2b3a2b; /* Màu xanh bảng đen */
+    border: 15px solid #5c4033; /* Viền gỗ */
+    border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    position: relative; max-width: 800px; margin: 0 auto;
 }
-.wish-card p { font-style: italic; color: #e0e0e0; margin-bottom: 15px; line-height: 1.6; }
-.wish-card span { color: #d4af37; font-weight: bold; display: block; text-align: right; }
+#chalkboard {
+    display: block; width: 100%; height: auto;
+    cursor: crosshair; touch-action: none; /* Hỗ trợ vẽ trên đthoai */
+}
+.chalk-controls { position: absolute; bottom: -50px; right: 0; }
+.chalk-controls .btn-cancel { background: #5c4033; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
 
-/* --- PHẦN 4: LỜI KẾT --- */
+/* --- PHẦN 5: VƯỜN HOA --- */
+.garden-section { padding: 100px 20px; max-width: 1000px; margin: 0 auto; }
+.garden-container {
+    min-height: 300px;
+    background: linear-gradient(to bottom, rgba(15, 12, 41, 0) 0%, rgba(46, 139, 87, 0.2) 100%);
+    border-bottom: 5px solid #2e8b57; /* Đất trồng cây */
+    border-radius: 10px; display: flex; flex-wrap: wrap; align-items: flex-end;
+    padding: 20px; gap: 15px; justify-content: center;
+}
+.flower {
+    font-size: 2.5rem; cursor: pointer; transition: transform 0.3s;
+    animation: sway 3s ease-in-out infinite alternate; transform-origin: bottom center;
+}
+.flower:hover { transform: scale(1.3); }
+@keyframes sway {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
+}
+
+/* --- PHẦN 6: LỜI KẾT & CÁC NÚT --- */
 .footer-section { padding: 100px 20px; text-align: center; background: linear-gradient(to top, rgba(15, 12, 41, 0.9), transparent); }
 .footer-section h2 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: #d4af37; margin-bottom: 20px; }
 .footer-section p { font-size: 1.2rem; color: #aaa; margin-bottom: 30px; }
@@ -94,15 +119,27 @@ body {
     box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); transition: transform 0.2s;
 }
 .btn-confetti:hover { transform: scale(1.05); }
-
-/* --- NÚT NHẠC --- */
 .music-btn {
     position: fixed; bottom: 20px; right: 20px; background: rgba(212, 175, 55, 0.8);
     color: #0a0a0a; border: none; border-radius: 50%; width: 50px; height: 50px;
     font-size: 1.5rem; cursor: pointer; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-/* --- MODAL (DÙNG CHUNG) --- */
+/* --- LIGHTBOX PHÓNG TO ẢNH --- */
+.lightbox {
+    display: none; position: fixed; z-index: 99999;
+    padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
+}
+.lightbox-img { margin: auto; display: block; max-width: 90%; max-height: 85vh; border-radius: 10px; animation: zoomIn 0.3s; }
+@keyframes zoomIn { from {transform:scale(0.8); opacity:0;} to {transform:scale(1); opacity:1;} }
+.close-lightbox {
+    position: absolute; top: 20px; right: 40px; color: #f1f1f1;
+    font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer;
+}
+.close-lightbox:hover { color: #d4af37; }
+
+/* --- MODAL DÙNG CHUNG --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
@@ -126,7 +163,7 @@ body {
 .btn-cancel { background: #333; color: white; }
 .btn-send { background: #d4af37; color: #0a0a0a; }
 
-/* --- HIỆU ỨNG ĐÈN LỒNG --- */
+/* --- ĐÈN LỒNG --- */
 .lantern {
     position: fixed; bottom: -100px; background: linear-gradient(to bottom, #ffeb3b, #ff9800);
     border-radius: 50% 50% 20% 20%; box-shadow: 0 0 30px 10px rgba(255, 152, 0, 0.6);
